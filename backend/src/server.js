@@ -1,6 +1,8 @@
 // Import required packages
 require('dotenv').config();
 const pool = require('./config/database');
+const authRoutes = require('./routes/authRoutes');
+const { authenticateToken } = require('./middleware/authMiddleware');
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -42,6 +44,34 @@ app.get('/db-test', async (req, res) => {
     res.status(500).json({ 
       success: false,
       error: error.message 
+    });
+  }
+});
+
+app.use('/api/auth', authRoutes);
+
+app.get('/api/profile', authenticateToken, async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT id, name, phone_number, user_type FROM users WHERE id = $1',
+      [req.user.userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'User not found' 
+      });
+    }
+
+    res.json({ 
+      success: true, 
+      user: result.rows[0] 
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to fetch profile' 
     });
   }
 });

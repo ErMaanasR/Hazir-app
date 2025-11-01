@@ -45,8 +45,7 @@ hazir-app/
 
 Development Status
 🔨 Phase: Initial Setup
-📅 Started: [Today's date]
-⏱️ Commitment: 3 hours/day
+📅 Started: [31-10-2025]
 
 Developer
-[Your Name] - Solo founder building in public
+Maanas Ruchandani - Solo founder building in public
